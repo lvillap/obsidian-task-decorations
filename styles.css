@@ -7,6 +7,16 @@ If your plugin does not need CSS, delete this file.
 
 */
 .latency-time {
-	color: rgb(118 171 166);
+	color: rgb(181, 255, 248);
 	font-size: 0.8rem;
+}
+.latency-time.big-urgency {
+    color: #ffba6a !important;
+}
+.latency-time.medium-urgency {
+    color: #fdff92;
+}
+.latency-time.huge-urgency {
+    color: #ffb2b2;
+    font-size: 0.9rem;
 }

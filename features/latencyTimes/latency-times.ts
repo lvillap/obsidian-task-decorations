@@ -38,8 +38,19 @@ export function registerTaskLatencyLabels(plugin: TaskLatencyPlugin) {
 							const deco = Decoration.widget({
 								widget: new class extends WidgetType {
 									toDOM() {
+
+										let urgency = "low-urgency";
+										if (latencyText.indexOf("month") !== -1) {
+											urgency = "huge-urgency";
+										} else if (latencyText.indexOf("weeks") !== -1) {
+											urgency = "big-urgency";
+										} else if (latencyText.indexOf("week") !== -1) {
+											urgency = "medium-urgency";
+										}
+
 										const span = document.createElement("span");
-										span.className = "latency-time";
+										span.classList.add("latency-time");
+										span.classList.add(urgency);
 										span.textContent = ` ${latencyText}`;
 										return span;
 									}
