@@ -1,3 +1,75 @@
+import TaskLatencyPlugin from "main";
+import { Decoration, DecorationSet, EditorView, ViewPlugin, Range, ViewUpdate, WidgetType } from '@codemirror/view';
+
+export function registerTaskLatencyLabels(plugin: TaskLatencyPlugin) {
+
+	const taskDecorator = ViewPlugin.fromClass(
+		class {
+			decorations: any;
+
+			constructor(view: EditorView) {
+				this.decorations = this.decorateTasks(view);
+			}
+
+			update(update: ViewUpdate) {
+				if (update.docChanged || update.viewportChanged) {
+					this.decorations = this.decorateTasks(update.view);
+				}
+			}
+
+			decorateTasks(view: EditorView): DecorationSet {
+
+				const widgets: Range<Decoration>[] = [];
+
+				for (const { from, to } of view.visibleRanges) {
+
+					const text = view.state.doc.sliceString(from, to);
+					const lines = text.split("\n");
+
+					let offset = from;
+					lines.forEach((line) => {
+
+						if (
+							isTaskWithDate(line)
+						) {
+
+							const latencyText = createLatencyTextFor(line);
+
+							const deco = Decoration.widget({
+								widget: new class extends WidgetType {
+									toDOM() {
+										const span = document.createElement("span");
+										span.className = "latency-time";
+										span.textContent = ` ${latencyText}`;
+										return span;
+									}
+
+									updateDOM(prev: HTMLElement) {
+										prev.textContent = ` ${latencyText}`;
+										return true;
+									}
+								}(),
+								side: 1,
+							});
+
+							if (offset + line.length <= view.state.doc.length) {
+								widgets.push(deco.range(offset + line.length));
+							}
+						}
+						offset += line.length + 1;
+					});
+				}
+				return Decoration.set(widgets, true); // Forzar consistencia en las decoraciones
+			}
+		},
+		{
+			decorations: (v) => v.decorations,
+		}
+	);
+
+	plugin.registerEditorExtension(taskDecorator);
+}
+
 
 export function isTaskWithDate(line: string): RegExpMatchArray | null {
 	return line.match(/- \[[ x]\] .+ ➕\s*\d{4}-\d{2}-\d{2}.*(✅\s*\d{4}-\d{2}-\d{2})?/);
