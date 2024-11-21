@@ -1,10 +1,13 @@
 import { Plugin } from "obsidian";
 import { EditorView, Decoration, ViewPlugin, ViewUpdate, WidgetType, Range, DecorationSet } from "@codemirror/view";
 import { createLatencyTextFor, isTaskWithDate } from "features/latencyTimes/latency-times";
+import { registerAutomaticCreationDate } from "features/automatic-creation-date/automatic-creation-date";
 
 export default class TaskLatencyPlugin extends Plugin {
 
 	onload() {
+
+		registerAutomaticCreationDate(this);
 
 		const taskDecorator = ViewPlugin.fromClass(
 			class {
