@@ -1,0 +1,9 @@
+{
+	"id": "obsidian-task-decorations",
+	"name": "Obsidian task decorations",
+	"version": "1.0.0",
+	"minAppVersion": "0.15.0",
+	"description": "Adds simple decorations to tasks so visualization is more suitable",
+	"author": "Luis M. Villa",
+	"isDesktopOnly": false
+}
