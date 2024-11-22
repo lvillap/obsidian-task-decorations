@@ -20,3 +20,7 @@ If your plugin does not need CSS, delete this file.
     color: #ffb2b2;
     font-size: 0.9rem;
 }
+#calendar-container tr td:nth-child(6), #calendar-container tr td:nth-child(7) {
+    background-color: #383838;
+    border-right: 4px solid #262626;
+}
