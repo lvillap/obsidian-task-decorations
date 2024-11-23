@@ -101,7 +101,9 @@ export function createLatencyTextFor(line: string): string {
 
 		if (closedDate) {
 			let daysToClose = getDatesDifferenceText(createdDate, closedDate);
-			if (daysToClose !== "today") {
+			if (daysToClose === "today") {
+				daysToClose = "the same day";
+			} else {
 				daysToClose = `in ${daysToClose}`;
 			}
 			latencyText = `(done ${daysToClose})`.replace(" ago", "");
